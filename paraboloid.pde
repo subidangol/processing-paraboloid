@@ -1,7 +1,5 @@
-final float A = 3;
-final float B = 4;
-
 final PVector[][] vertexes = new PVector[100][100];
+float camOrbitRadius = 120;
 
 /**
  * Function of gaussin curvature.
@@ -13,33 +11,45 @@ final PVector[][] vertexes = new PVector[100][100];
  * @return result of function
  */
 float gaussian(final float u, final float v) {
-  return (sq(u) - sq(v)) / 2;
-  //return 4 / (
-  //  sq(A)
-  //  * sq(B)
-  //  * (
-  //    1
-  //    + (4 * sq(u)) / sq(sq(A))
-  //    + (4 * sq(v)) / sq(sq(B))
-  //  ));
+  return 0;
+  //return (sq(u) - sq(v)) / 2;
 }
 
 void setup() {
   size(500, 500, P3D);
   
+  /* Calculate vertexes with function */
   for (int x = 0; x < 100; x++) {
     for (int z = 0; z < 100; z++) {
-      vertexes[x][z] = new PVector(x, gaussian(x, z), z);
+      vertexes[x][z] = new PVector(x - 50, gaussian(x, z), z - 50);
     }
   }
 }
 
+void mouseWheel(final MouseEvent event) {
+  camOrbitRadius += event.getCount() * 2;
+}
+
 void draw() {
+  
+  /* Clear & translate */
   background(0);
   translate(width / 2, height / 2, 0);
   
-  fill(200);
-  stroke(155);
+  /* Position camera */
+  final float camPosX = cos(map(mouseX, 0, width, -PI, 0)) * camOrbitRadius;
+  final float camPosY = sin(map(mouseY, 0, height, -PI, PI)) * camOrbitRadius;
+  final float camPosZ = cos(map(mouseY, 0, height, -PI, PI)) * camOrbitRadius;
+  
+  camera(
+    camPosX, camPosY, camPosZ,
+    0, 0, 0,
+    0, 1, 0);
+  
+  /* Draw surface */
+  fill(30, 30, 255);
+  stroke(255, 0, 0);
+  
   beginShape(QUADS);
   
   for (int x = 0; x < 100 - 1; x++) {
