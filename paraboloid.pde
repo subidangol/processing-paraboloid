@@ -1,4 +1,7 @@
-final PVector[][] vertexes = new PVector[100][100];
+final float SIGMA = 0.2;
+final float COEFFICIENT = 2 * PI * sq(SIGMA);
+
+PVector[][] vertexes = new PVector[100][100];
 float camOrbitRadius = 120;
 
 /**
@@ -11,17 +14,20 @@ float camOrbitRadius = 120;
  * @return result of function
  */
 float gaussian(final float u, final float v) {
-  return 0;
-  //return (sq(u) - sq(v)) / 2;
+  return (1 / COEFFICIENT)
+    * exp(-(sq(u) + sq(v)) / COEFFICIENT);
 }
 
 void setup() {
   size(500, 500, P3D);
+  println(COEFFICIENT);
   
   /* Calculate vertexes with function */
   for (int x = 0; x < 100; x++) {
     for (int z = 0; z < 100; z++) {
-      vertexes[x][z] = new PVector(x - 50, gaussian(x, z), z - 50);
+      final float fx = map(x, 0, 100, -1.2, 1.2);
+      final float fz = map(z, 0, 100, -1.2, 1.2);
+      vertexes[x][z] = new PVector(x - 50, - gaussian(fx, fz) * 10, z - 50);
     }
   }
 }
