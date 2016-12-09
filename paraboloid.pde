@@ -53,8 +53,8 @@ void draw() {
     0, 1, 0);
   
   /* Draw surface */
-  fill(30, 30, 255);
-  stroke(255, 0, 0);
+  fill(140, 140, 255);
+  stroke(0, 0, 255);
   
   beginShape(QUADS);
   
